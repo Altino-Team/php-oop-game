@@ -1,0 +1,9 @@
+{
+  "game": {
+    "currently_playing": "&eYou are playing %s%s &e(Level &b%s&e)%n%n",
+    "player_info": "&eYou have &a%s &eHP, &b%s &emana, and &d%s &exp points.%n%n"
+  },
+  "test": {
+    "test": "testen"
+  }
+}

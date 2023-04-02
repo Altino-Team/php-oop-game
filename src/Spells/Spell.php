@@ -37,14 +37,24 @@ abstract class Spell {
         $this->owner = $owner;
     }
 
-    public function getName(): string
+    public function getNameKey(): string
     {
         return $this->name;
     }
 
-    public function getDescription(): string
+    public function getName(): string
+    {
+        return translate($this->name);
+    }
+
+    public function getDescriptionKey(): string
     {
         return $this->description;
+    }
+
+    public function getDescription(): string
+    {
+        return translate($this->description);
     }
 
     public function resetCooldown(): void
@@ -60,5 +70,10 @@ abstract class Spell {
     public function getCooldownCountDown(): int
     {
         return $this->cooldownCountDown;
+    }
+
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }

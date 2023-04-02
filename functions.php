@@ -1,7 +1,10 @@
 <?php
 
 use Altino\Characters\Character;
+use Altino\Spells\Spell;
 use Altino\Types\Element;
+use Altino\Languages\Translatable;
+use JetBrains\PhpStorm\NoReturn;
 
 
 function chance(float $percentage): bool
@@ -58,6 +61,7 @@ function debugCharactersArray($characters)
 {
     $test = $characters;
     orderByInitiative($test);
+    echo PHP_EOL;
     foreach ($test as $character) {
         echoWithColor($character->toString().PHP_EOL.PHP_EOL);
     }
@@ -97,4 +101,52 @@ function echoWithColor(string $text)
 
     echo $text."\033[0m";
 }
+
+function echoTranslation(string $key, ...$parameters){
+    echoWithColor(translate($key,...$parameters));
+}
+
+function translate(string $key, ...$parameters) : string {
+    $translation = Translatable::getTranslation($key);
+    $translation = str_replace("%n", PHP_EOL, $translation);
+    return sprintf($translation,...$parameters);
+}
+
+function displaySpell(Spell $spell){
+    if($spell->getManaCost() > $spell->getOwner()->getMana()){
+        $manaTranslation = translate("game.actions.not_enough_mana",$spell->getManaCost());
+    } else {
+        $manaTranslation = translate("game.actions.mana",$spell->getManaCost());
+    }
+    if($spell->getCooldownCountDown() > 0){
+        $cooldownTranslation = translate("game.actions.cooldown", $spell->getCooldownCountDown());
+    } else {
+        $cooldownTranslation = Translatable::getTranslation("game.actions.available");
+    }
+    echoTranslation("game.actions.main_text",$spell->getName(),$manaTranslation,$cooldownTranslation,$spell->getDescription());
+}
+
+function validateSpellAction(Spell $spell, Character $sender) : bool {
+    if($spell->getManaCost() > $sender->getMana()){
+        echoTranslation("game.error.not_enough_mana");
+        return false;
+    }
+    if($spell->getCooldownCountDown() > 0){
+        echoTranslation("game.error.in_cooldown");
+        return false;
+    }
+    return true;
+}
+
+function endWithStatistics($mapInput, $wins){
+    echo PHP_EOL.PHP_EOL;
+    echoTranslation("game.statistics.title");
+    $statsArray = array_map(fn (int $charWins) => ($charWins / GAME_NUMBER * 100)."%", $wins);
+    foreach ($statsArray as $name => $stats){
+        echoTranslation("game.statistics.character", $mapInput[$name]->getColorCode(), $name, $stats);
+    }
+    echoTranslation("game.end");
+    exit();
+}
+
 

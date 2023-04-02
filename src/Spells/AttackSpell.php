@@ -19,8 +19,8 @@ class AttackSpell extends Spell {
         $this->damageAmount = $damageAmount;
         $this->damageType = $damageType;
         parent::__construct(
-            "Attack",
-            "Attack someone with some mysterious power.",
+            "game.spells.attack.name",
+            "game.spells.attack.description",
             $manaCost,
             $cooldown
         );
@@ -29,7 +29,7 @@ class AttackSpell extends Spell {
     public function cast(Character $target): void
     {
         parent::cast($target);
-        echo "{$this->owner->getName()} fait son sort d'attaque à {$target->getName()} !" . PHP_EOL;
+        echoTranslation("game.spells.attack.cast", $this->owner->getColorCode(),$this->owner->getName(), $target->getColorCode(),$target->getName());
         if($this->damageType == DamageType::PHYSICAL){
             $target->takePhysicalDamages($this->owner,$this->damageAmount);
         } else {
@@ -37,7 +37,10 @@ class AttackSpell extends Spell {
         }
     }
 
-
+    public function getDescription(): string
+    {
+        return translate($this->description, $this->damageAmount);
+    }
 
 
 }

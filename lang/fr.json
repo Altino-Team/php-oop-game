@@ -1,0 +1,70 @@
+{
+  "game": {
+    "end": "&d========================================================%n&d|                 &cFin de la Partie                     &d|%n&d|                &bMerci d'avoir joué !                  &d|%n&d========================================================%n",
+    "statistics": {
+      "title": "&d========================================================%n&d|                    &9Statistiques                      &d|%n&d========================================================%n",
+      "character": "              %s%s &f: &a%s &ede Réussite%n"
+    },
+    "display_winner": "&d========================================================%n&d|                    %s%s &ea gagné !                   &d|%n&d========================================================%n",
+    "user_choice": {
+      "continue": "&9Appuyez sur &aEntrée &9pour continuer...",
+      "choose_character": "&9Choisissez votre personnage :%n",
+      "character_presentation": "&9- %s%s%n",
+      "chosen_character": "&aVous avez choisi %s%s&a.%n",
+      "invalid_character": "&cPersonnage invalide.%n"
+    },
+    "normal_turn": "&eC'est au tour de %s%s &e(Niveau &b%s&e)%n%n",
+    "user_turn": "&eC'est votre tour [%s%s &f(&eNiveau &b%s&f)&e] &a(%s PV) &b(%s Mana)%n%n",
+    "player_target": "&c[CIBLE] &eVous ciblez %s%s &e(Niveau &b%s&e)%n&a(%s PV) &c(%s Armure) &d(%s Résistance Magique)%n",
+    "currently_playing":  "&eVous jouez %s%s &e(Niveau &b%s&e)%n%n",
+    "player_info": "&eVous avez &a%s &epoints de vie, &b%s &epoints de mana et &d%s &epoints d'expérience.%n%n",
+    "spells": {
+      "heal": {
+        "name": "&aSoin",
+        "description": "&eVous soigne de &a%s &ePV.",
+        "cast": "%s%s &ese soigne de &a%s HP&e. Il est maintenant à &a%s HP&e.%n"
+      },
+      "defend": {
+        "name": "&dDéfense",
+        "description": "&eVous défend pour &b1 &etour. (+&d%s &ede résistance magique et d'armure)",
+        "cast": "%s%s &ese défend pour un tour (Bonus : +&d%s &een armure et en résistance magique).%n",
+        "end": "%s%s &en'est plus sous l'effet de son sort de défense.%n"
+      },
+      "attack": {
+        "name": "&cAttaque",
+        "description": "&eVotre sort d'attaque, inflige &c%s &edégâts.",
+        "cast": "%s%s &efait son sort d'attaque à %s%s &e!%n"
+      }
+    },
+    "character": {
+      "not_enough_mana_to_heal": "%s%s &en'a malheureusement pas assez de mana pour se soigner !%n",
+      "no_cooldown_to_heal": "%s%s &en'a malheureusement pas son sort de heal de disponible !%n",
+      "want_to_heal": "%s%s &ea moins de &c40%% &ede ses &aPV&e et aimerait donc se soigner.%n",
+      "attack": "%s%s &efait une attaque de base à %s%s &e!%n",
+      "dodge": "%s%s &eesquive l'attaque de %s%s &e!%n",
+      "critical_hit": "&cCoup critique ! &e(&b%s%% &ede chance)%n",
+      "died": "%s%s &eest mort(e) !%n",
+      "max_level": "%s%s &eest au niveau maximum (&dNiveau &b%s&e) !%n",
+      "level_up": "%s%s &ea gagné un niveau ! Il est maintenant au niveau &b%s&e !%n",
+      "magic_resistance": "&dRésistance Magique",
+      "armor": "&cArmure",
+      "took_damage": "%s%s &ea perdu &a%s &ePV ! Il est maintenant à &a%s PV &e(&a%s PV &e- &c%s Dégâts&e)%n  &cDEGATS &e= &c%s(Dégats) &e* &b%s(Multiplieur de Type) &e- &d%s &e(%s&e de %s%s&e)%n         = &c%s(Dégâts avec Type) &e- &d%s &e(%s&e de %s%s&e)%n         &e= &c%s%n",
+      "info": "%s%s &e(Niveau &b%s&e) &f:%n&f  - &eType : %s%s%n&f  - &eVie : &a%s&f/&a%s%n&f  - &eMana : &b%s&f/&b%s%n&f  - &eObjet : &d%s%n&f  - &eInitiative : &f%s%n&f  - &eXP pour niveau suivant : &f%s%n&f  - &cArmure &f| &dRésistance Magique &e: &c%s &f| &d%s%n&f  - &eChance de coup critique : &f%s%%%n&f  - &eChance d'esquive : &f%s%%%n&f  - &eDégâts &cPhysiques &f| &dMagiques &e: &c%s &f| &d%s%n&f  - &eCooldown (&aSoin &f| &dDéfense &f| &cAttaque&e) : &e(&a%s &f| &d%s &f| &c%s&e)"
+    },
+    "error": {
+      "not_enough_mana": "&cVous n'avez pas assez de mana !%n",
+      "in_cooldown": "&cCe sort est en récupération !%n",
+      "invalid_action": "&cCette action n'existe pas !%n"
+    },
+    "actions": {
+      "which_action": "&9Quelle action voulez-vous effectuer ?%n",
+      "available_actions": "&9Voici les actions disponibles :%n%n",
+      "main_text": "&a%s &e: %s&e %s%n&e%s%n%n",
+      "cooldown": "&e(&c%s &etours de cooldown)",
+      "available": "&e(&aDisponible&e)",
+      "mana": "&b(%s Mana)",
+      "not_enough_mana": "&c(%s Mana)",
+      "baseAttack": "&fAttaque de base &e:%n&eUne simple attaque de base, inflige &c%s &edégâts. Peut être Critique (&b%s&e%% de chance).%n%n"
+    }
+  }
+}

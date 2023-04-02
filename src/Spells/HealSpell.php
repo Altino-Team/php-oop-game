@@ -11,8 +11,8 @@ class HealSpell extends Spell {
     public function __construct(int $healAmount, int $manaCost, int $cooldown) {
         $this->healAmount = $healAmount;
         parent::__construct(
-            "Defend",
-            "Defend yourself for one turn by adding bonus defense amount.",
+            "game.spells.heal.name",
+            "game.spells.heal.description",
             $manaCost,
             $cooldown
         );
@@ -23,7 +23,12 @@ class HealSpell extends Spell {
         parent::cast($target);
         $this->owner->setHealth($this->owner->getHealth() + $this->healAmount);
         $this->triggerCooldown();
-        echo $this->owner->getName() . " se soigne de $this->healAmount HP. Il est maintenant à ".$this->owner->getHealth()." HP.".PHP_EOL;
+        echoTranslation("game.spells.heal.cast", $this->owner->getColorCode(),$this->owner->getName(), $this->healAmount, $this->owner->getHealth());
+    }
+
+    public function getDescription(): string
+    {
+        return translate($this->description, $this->healAmount);
     }
 
 

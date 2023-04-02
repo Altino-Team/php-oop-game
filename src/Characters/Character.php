@@ -7,6 +7,7 @@ use Altino\Spells\DefendSpell;
 use Altino\Spells\HealSpell;
 use Altino\Types\Element;
 use Altino\Items\Item;
+use Altino\Languages\Translatable;
 
 class Character
 {
@@ -56,19 +57,27 @@ class Character
         $this->canHealForThisTurn = true;
     }
 
+    public function userTurn(): void
+    {
+        $this->recoverMana();
+        $this->attackSpell->triggerTurn();
+        $this->defendSpell->triggerTurn();
+        $this->healSpell->triggerTurn();
+    }
+
     private function triggerAction(Character $target){
         if($this->canHealForThisTurn && $this->health*100/$this->maxHealth <= 40){
-            echo "$this->name a moins de 40% de ses points de vie, il aimerait donc se soigner !" . PHP_EOL;
+            echoTranslation("game.character.want_to_heal",$this->getColorCode(),$this->name);
             if($this->healSpell->getCooldownCountDown() == 0){
                 if($this->healSpell->getManaCost() <= $this->mana){
                     $this->healSpell->cast($this);
                     $this->removeXpForNextLevel(10);
                     return;
                 } else {
-                    echo "$this->name n'a malheureusement pas assez de mana pour se soigner !" . PHP_EOL;
+                    echoTranslation("game.character.not_enough_mana_to_heal",$this->getColorCode(),$this->name);
                 }
             } else {
-                echo "$this->name n'a malheureusement pas son sort de heal de disponible !" . PHP_EOL;
+                echoTranslation("game.character.no_cooldown_to_heal",$this->getColorCode(),$this->name);
             }
             $this->canHealForThisTurn = false;
         }
@@ -95,18 +104,18 @@ class Character
         }
     }
 
-    private function attack(Character $target): void
+    public function attack(Character $target): void
     {
-        echo "$this->name fait une attaque de base à $target->name !" . PHP_EOL;
+        echoTranslation("game.character.attack",$this->getColorCode(),$this->name,$target->getColorCode(),$target->name);
         if(chance($target->dodgeChance)){
-            echo "$target->name esquive l'attaque de $this->name" . PHP_EOL;
-            $this->removeXpForNextLevel(10);
+            echoTranslation("game.character.dodge",$target->getColorCode(),$target->name,$this->getColorCode(),$this->name);
+            $target->removeXpForNextLevel(10);
             return;
         }
         $futureDamages = $this->physicalDamages + $this->item->getAdditionalPhysicalDamages();
         if(chance($this->criticalChance)){
             $futureDamages*=2;
-            echo "Coup critique ! (".($this->criticalChance*100)."% de chance)" . PHP_EOL;
+            echoTranslation("game.character.critical_hit",$this->criticalChance*100);
             $this->removeXpForNextLevel(20);
         }
         $target->takePhysicalDamages($this,$futureDamages);
@@ -121,7 +130,8 @@ class Character
             $realDamages = 0;
         }
         $this->setHealth($this->health - $realDamages);
-        echo "$this->name a perdu ".($realDamages)." points de vie ! Il est maintenant à $this->health HP ($precedentHealth HP - $realDamages Dégâts)".PHP_EOL."  DEGATS = $damages(Dégats) * $multiplier(Multiplieur de Type) - $this->armor (Armure de $this->name)" . PHP_EOL . "         = ".$damages * $multiplier."(Dégâts avec Type) - $this->armor (Armure de $this->name)" . PHP_EOL . "         = $realDamages" . PHP_EOL;
+        $armor = Translatable::getTranslation("game.character.armor");
+        echoTranslation("game.character.took_damage",$this->getColorCode(),$this->name,$realDamages,$this->health,$precedentHealth,$realDamages,$damages,$multiplier,$this->magicResistance,$armor,$this->getColorCode(),$this->name,$damages*$multiplier,$this->magicResistance,$armor,$this->getColorCode(),$this->name,$realDamages);
         $this->checkDeath();
     }
 
@@ -134,14 +144,15 @@ class Character
             $realDamages = 0;
         }
         $this->setHealth($this->health - $realDamages);
-        echo "$this->name a perdu ".($realDamages)." points de vie ! Il est maintenant à $this->health HP ($precedentHealth HP - $realDamages Dégâts)".PHP_EOL."  DEGATS = $damages(Dégats) * $multiplier(Multiplieur de Type) - $this->magicResistance (Résistance Magique de $this->name)" . PHP_EOL . "         = ".$damages * $multiplier."(Dégâts avec Type) - $this->magicResistance (Résistance Magique de $this->name)" . PHP_EOL . "         = $realDamages" . PHP_EOL;
+        $magicRes = Translatable::getTranslation("game.character.magic_resistance");
+        echoTranslation("game.character.took_damage",$this->getColorCode(),$this->name,$realDamages,$this->health,$precedentHealth,$realDamages,$damages,$multiplier,$this->magicResistance,$magicRes,$this->getColorCode(),$this->name,$damages*$multiplier,$this->magicResistance,$magicRes,$this->getColorCode(),$this->name,$realDamages);
         $this->checkDeath();
     }
 
     private function checkDeath(): void
     {
         if($this->health == 0){
-            echo "$this->name est mort" . PHP_EOL;
+            echoTranslation("game.character.died",$this->getColorCode(),$this->name);
             $this->isDead = true;
             $this->removeXpForNextLevel(20);
         }
@@ -237,23 +248,31 @@ class Character
         $this->setMana($this->mana + 10);
     }
 
+    public function getAttackSpell(): AttackSpell
+    {
+        return $this->attackSpell;
+    }
+
+    public function getDefendSpell(): DefendSpell
+    {
+        return $this->defendSpell;
+    }
+
+    public function getHealSpell(): HealSpell
+    {
+        return $this->healSpell;
+    }
+
 
     public function toString(): string
     {
-        return "{$this->getColorCode()}{$this->name}&f:".PHP_EOL
-            ."&f  - &eElement : {$this->getColorCode()}{$this->element->name}".PHP_EOL
-            ."&f  - &eVie : &a{$this->health}".PHP_EOL
-            ."&f  - &eMana : &b{$this->mana}".PHP_EOL
-            ."&f  - &eObjet : &d{$this->item->getName()}".PHP_EOL
-            ."&f  - &eArmure : &f{$this->armor}".PHP_EOL
-            ."&f  - &eRésistance magique : &f{$this->magicResistance}".PHP_EOL
-            ."&f  - &eChance de coup critique : &f{$this->criticalChance}".PHP_EOL
-            ."&f  - &eChance d'esquive : &f{$this->dodgeChance}".PHP_EOL
-            ."&f  - &eInitiative : &f{$this->initiative}".PHP_EOL
-            ."&f  - &eDégâts &cphysiques&f/&dmagiques : &c{$this->physicalDamages}&f/&d{$this->magicalDamages}".PHP_EOL
-            ."&f  - &eCooldown Sort d'attaque : &f{$this->attackSpell->getCooldownCountDown()}".PHP_EOL
-            ."&f  - &eCooldown Sort de défense : &f{$this->defendSpell->getCooldownCountDown()}".PHP_EOL
-            ."&f  - &eCooldown Sort de soin : &f{$this->healSpell->getCooldownCountDown()}";
+        return translate("game.character.info",
+            $this->getColorCode(),$this->name,$this->level,$this->getColorCode(),
+            $this->element->name,$this->health,$this->maxHealth,$this->mana,$this->maxMana,$this->item->getName(),
+            $this->initiative,$this->xpForNextLevel,$this->armor,$this->magicResistance,
+            $this->criticalChance*100,$this->dodgeChance*100,$this->physicalDamages,
+            $this->magicalDamages,$this->healSpell->getCooldownCountDown(),
+            $this->defendSpell->getCooldownCountDown(),$this->attackSpell->getCooldownCountDown());
     }
 
     public function setMana(int $mana){
@@ -291,7 +310,7 @@ class Character
 
     private function levelUp() {
         if($this->level == 20){
-            echo "$this->name est au niveau maximum (Niveau $this->level) !". PHP_EOL;
+            echoTranslation("game.character.max_level",$this->getColorCode(),$this->name,$this->level);
             return;
         }
         $this->level++;
@@ -303,7 +322,7 @@ class Character
         $this->armor += 5;
         $this->magicResistance += 5;
         $this->initiative += 10;
-        echo "$this->name passe au niveau $this->level !". PHP_EOL;
+        echoTranslation("game.character.level_up",$this->getColorCode(),$this->name,$this->level);
     }
 
     public function getLevel(): int

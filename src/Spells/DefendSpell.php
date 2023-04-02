@@ -12,8 +12,8 @@ class DefendSpell extends Spell {
     public function __construct(int $defenseAmount, int $manaCost, int $cooldown) {
         $this->defenseAmount = $defenseAmount;
         parent::__construct(
-            "Defend",
-            "Defend yourself for one turn by adding bonus defense amount.",
+            "game.spells.defend.name",
+            "game.spells.defend.description",
             $manaCost,
             $cooldown
         );
@@ -26,13 +26,13 @@ class DefendSpell extends Spell {
         $this->owner->setMagicResistance($this->owner->getMagicResistance() + $this->defenseAmount);
         $this->isDefending = true;
         $this->triggerCooldown();
-        echo $this->owner->getName() . " se défend pour un tour (Bonus : +$this->defenseAmount en armure et en résistance magique).".PHP_EOL;
+        echoTranslation("game.spells.defend.cast", $this->owner->getColorCode(),$this->owner->getName(), $this->defenseAmount);
     }
 
     private function endSpell(){
         $this->owner->setArmor($this->owner->getArmor() - $this->defenseAmount);
         $this->owner->setMagicResistance($this->owner->getMagicResistance() - $this->defenseAmount);
-        echo $this->owner->getName() . " n'est plus sous l'effet de son sort de défense.".PHP_EOL;
+        echoTranslation("game.spells.defend.end", $this->owner->getColorCode(),$this->owner->getName());
     }
 
     public function triggerTurn(): void
@@ -42,5 +42,10 @@ class DefendSpell extends Spell {
             $this->endSpell();
             $this->isDefending = false;
         }
+    }
+
+    public function getDescription(): string
+    {
+        return translate($this->description, $this->defenseAmount);
     }
 }
