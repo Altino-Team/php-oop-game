@@ -2,7 +2,7 @@
 <center><b>This README is available in English and in French<b>
 
 <a href="README.md"><img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="Drapeau anglais" width="60"/></a>
-<a href="README-fr.md"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="Drapeau français" width="60"></a>
+<a href="readme/README-fr.md"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="Drapeau français" width="60"></a>
 </center>
 
 # Turn-Based Combat Game
