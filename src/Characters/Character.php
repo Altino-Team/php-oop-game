@@ -131,7 +131,7 @@ class Character
         }
         $this->setHealth($this->health - $realDamages);
         $armor = Translatable::getTranslation("game.character.armor");
-        echoTranslation("game.character.took_damage",$this->getColorCode(),$this->name,$realDamages,$this->health,$precedentHealth,$realDamages,$damages,$multiplier,$this->magicResistance,$armor,$this->getColorCode(),$this->name,$damages*$multiplier,$this->magicResistance,$armor,$this->getColorCode(),$this->name,$realDamages);
+        echoTranslation("game.character.took_damage",$this->getColorCode(),$this->name,$realDamages,$this->health,$precedentHealth,$realDamages,$damages,$multiplier,$this->armor,$armor,$this->getColorCode(),$this->name,$damages*$multiplier,$this->armor,$armor,$this->getColorCode(),$this->name,$realDamages);
         $this->checkDeath();
     }
 

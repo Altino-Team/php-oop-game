@@ -1,9 +1,70 @@
 {
   "game": {
-    "currently_playing": "&eYou are playing %s%s &e(Level &b%s&e)%n%n",
-    "player_info": "&eYou have &a%s &eHP, &b%s &emana, and &d%s &exp points.%n%n"
-  },
-  "test": {
-    "test": "testen"
+    "end": "&d========================================================%n&d|                 &cEnd of the Game                      &d|%n&d|                &bThanks for playing !                  &d|%n&d========================================================%n",
+    "statistics": {
+      "title": "&d========================================================%n&d|                    &9Statistics                        &d|%n&d========================================================%n",
+      "character": "              %s%s &f: &a%s &esuccess rate%n"
+    },
+    "display_winner": "&d========================================================%n&d|                    %s%s &ehas won !                   &d|%n&d========================================================%n",
+    "user_choice": {
+      "continue": "&9Press &aEnter &9to continue...",
+      "choose_character": "&9Chose your character :%n",
+      "character_presentation": "&9- %s%s%n",
+      "chosen_character": "&aYou've chosen %s%s&a.%n",
+      "invalid_character": "&cInvalid character.%n"
+    },
+    "normal_turn": "&eIt's %s%s &e(Niveau &b%s&e) turn%n%n",
+    "user_turn": "&eIt's your turn [%s%s &f(&eLevel &b%s&f)&e] &a(%s HP) &b(%s Mana)%n%n",
+    "player_target": "&c[CIBLE] &eYou're targeting %s%s &e(Level &b%s&e)%n&a(%s HP) &c(%s Armor) &d(%s Magic Resistance)%n",
+    "currently_playing":  "&eYou're playing %s%s &e(Niveau &b%s&e)%n%n",
+    "player_info": "&eYou have &a%s &eHP, &b%s &eMana and &d%s &eXP points.%n%n",
+    "spells": {
+      "heal": {
+        "name": "&aHeal",
+        "description": "&eHeals you for &a%s &eHP.",
+        "cast": "%s%s &eheals for &a%s HP&e. He is now at &a%s HP&e.%n"
+      },
+      "defend": {
+        "name": "&dDefend",
+        "description": "&eYou defend for &b1 &eturn. (+&d%s &emagic resistance and armor)",
+        "cast": "%s%s &eis defending for one turn. (Bonus : +&d%s &earmor and magic resistance)%n",
+        "end": "%s%s &eis no longer under the effect of their defense spell.%n"
+      },
+      "attack": {
+        "name": "&cAttack",
+        "description": "&eYour attack spell, deals &c%s &edamages.",
+        "cast": "%s%s &ecasts his attack spell on %s%s &e!%n"
+      }
+    },
+    "character": {
+      "not_enough_mana_to_heal": "%s%s &eunfortunately doesn't have enough mana to heal himself!%n",
+      "no_cooldown_to_heal": "%s%s &eunfortunately doesn't have their healing spell available!%n",
+      "want_to_heal": "%s%s &ehas less than &c40%% &eof their &aHP&e remaining and would like to heal.%n",
+      "attack": "%s%s &edoes a basic attack on %s%s &e!%n",
+      "dodge": "%s%s &edodges the attack from %s%s &e!%n",
+      "critical_hit": "&cCritical hit ! &e(&b%s%% &echance)%n",
+      "died": "%s%s &ehas died !%n",
+      "max_level": "%s%s &eis at maximum level (&dLevel &b%s&e) !%n",
+      "level_up": "%s%s &ehas gained a level! He is now at level &b%s&e !%n",
+      "magic_resistance": "&dMagic Resistance",
+      "armor": "&cArmor",
+      "took_damage": "%s%s &elost &a%s &eHP ! He is now at &a%s HP &e(&a%s HP &e- &c%s Damages&e)%n  &cDAMAGES &e= &c%s(Damages) &e* &b%s(Type Multiplier) &e- &d%s &e(%s&e of %s%s&e)%n         = &c%s(Damages with Type) &e- &d%s &e(%s&e of %s%s&e)%n         &e= &c%s%n",
+      "info": "%s%s &e(Level &b%s&e) &f:%n&f  - &eType : %s%s%n&f  - &eHealth : &a%s&f/&a%s%n&f  - &eMana : &b%s&f/&b%s%n&f  - &eItem : &d%s%n&f  - &eInitiative : &f%s%n&f  - &eXP for next level : &f%s%n&f  - &cArmor &f| &dMagic Resistance &e: &c%s &f| &d%s%n&f  - &eCritical Chance : &f%s%%%n&f  - &eDodge Chance : &f%s%%%n&f  - &cPhysical &f| &dMagical &eDamages : &c%s &f| &d%s%n&f  - &eCooldown (&aHeal &f| &dDefend &f| &cAttack&e) : &e(&a%s &f| &d%s &f| &c%s&e)"
+    },
+    "error": {
+      "not_enough_mana": "&cYou don't have enough Mana !%n",
+      "in_cooldown": "&cThis spell is in cooldown !%n",
+      "invalid_action": "&cThis action does not exist !%n"
+    },
+    "actions": {
+      "which_action": "&9Which action do you want to do ?%n",
+      "available_actions": "&9Here are the available actions :%n%n",
+      "main_text": "&a%s &e: %s&e %s%n&e%s%n%n",
+      "cooldown": "&e(&c%s &ecooldown turns)",
+      "available": "&e(&aAvailable&e)",
+      "mana": "&b(%s Mana)",
+      "not_enough_mana": "&c(%s Mana)",
+      "baseAttack": "&fBasic Attack &e:%n&eA basic attack, deals &c%s &e damages. May Crit (&b%s&e%% chance).%n%n"
+    }
   }
 }

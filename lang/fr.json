@@ -17,7 +17,7 @@
     "user_turn": "&eC'est votre tour [%s%s &f(&eNiveau &b%s&f)&e] &a(%s PV) &b(%s Mana)%n%n",
     "player_target": "&c[CIBLE] &eVous ciblez %s%s &e(Niveau &b%s&e)%n&a(%s PV) &c(%s Armure) &d(%s Résistance Magique)%n",
     "currently_playing":  "&eVous jouez %s%s &e(Niveau &b%s&e)%n%n",
-    "player_info": "&eVous avez &a%s &epoints de vie, &b%s &epoints de mana et &d%s &epoints d'expérience.%n%n",
+    "player_info": "&eVous avez &a%s &ePV, &b%s &eMana et &d%s &epoints d'XP.%n%n",
     "spells": {
       "heal": {
         "name": "&aSoin",
@@ -27,7 +27,7 @@
       "defend": {
         "name": "&dDéfense",
         "description": "&eVous défend pour &b1 &etour. (+&d%s &ede résistance magique et d'armure)",
-        "cast": "%s%s &ese défend pour un tour (Bonus : +&d%s &een armure et en résistance magique).%n",
+        "cast": "%s%s &ese défend pour un tour. (Bonus : +&d%s &een armure et en résistance magique)%n",
         "end": "%s%s &en'est plus sous l'effet de son sort de défense.%n"
       },
       "attack": {
