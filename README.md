@@ -1,9 +1,9 @@
 
-<center><b>This README is available in English and in French<b>
+<div style="text-align: center;"><b>This README is available in English and in French</b>
 
 <a href="README.md"><img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_United_Kingdom_%283-5%29.svg" alt="English Flag" width="60"/></a>
 <a href="README-fr.md"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Flag_of_France.svg" alt="French Flag" width="60"></a>
-</center>
+</div>
 
 # Turn-Based Combat Game
 Game made for the PHP OOP course at ESGI Paris.
