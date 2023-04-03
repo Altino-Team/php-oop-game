@@ -3,59 +3,18 @@
 require_once('./autoload.php');
 require_once('./functions.php');
 
-use Altino\Types\{Element, DamageType};
-use Altino\Characters\Character;
-use Altino\Items\Item;
-use \Altino\Spells\{AttackSpell, DefendSpell, HealSpell};
+defineGameNumber($argv);
 
+loadLanguages($argv);
 
-if(in_array("--turn", $argv)){
-    $turn = $argv[array_search("--turn", $argv) + 1];
-    $turn = (int)$turn;
-    if($turn > 0){
-        if(in_array("--play", $argv)){
-            define("GAME_NUMBER", 1);
-        } else {
-            define("GAME_NUMBER", $turn);
-        }
-    } else {
-        define("GAME_NUMBER", 1);
-    }
-} else {
-    define("GAME_NUMBER", 1);
-}
-
-if (!file_exists('config.ini')) {
-    $config = array('language' => 'en');
-    file_put_contents('config.ini', serialize($config));
-}
-$config = unserialize(file_get_contents('config.ini'));
-if(in_array("--lang", $argv)){
-    $config['language'] = $argv[array_search("--lang", $argv) + 1];
-    file_put_contents('config.ini', serialize($config));
-}
-
-$brand = new Character("Brand", Element::FIRE, 3600, 250,
-    new Item("Baton du Vide", 10, 200, 10, 10, 10),
-    100, 90, 0.20, 0.20, 100,100,280,
-    new AttackSpell(700,DamageType::MAGICAL,40,1),new DefendSpell(150,50,4),new HealSpell(800,40,2));
-$nilah = new Character("Nilah", Element::WATER, 2200, 140,
-    new Item("Arc-Bouclier", 150, 0, 0, 10, 10),
-    90, 150, 0.60, 0.10, 120,180,30,
-    new AttackSpell(450,DamageType::PHYSICAL,40,2),new DefendSpell(120,20,4),new HealSpell(500,30,4));
-$ivern = new Character("Ivern", Element::GRASS, 5000, 120,
-    new Item("Warmog", 0, 0, 30, 800, 0),
-    100, 150, 0.05, 0.05, 140,150,200,
-    new AttackSpell(400,DamageType::MAGICAL,30,2),new DefendSpell(200,70,5),new HealSpell(500,50,3));
-
-$characters = [$brand, $nilah, $ivern];
+$characters = createCharacters();
 
 $mapInput = [];
 foreach ($characters as $character) {
     $mapInput[$character->getName()] = $character;
 }
 
-if(in_array("--play", $argv)){
+if (in_array("--play", $argv)) {
     userInGame($characters, $mapInput);
 } elseif (in_array("--auto", $argv)) {
     autoPlayedGame($characters[0], $characters[1], $characters[2], $mapInput);
@@ -91,7 +50,7 @@ function autoPlayedGame($brand, $nilah, $ivern, $mapInput)
 
         $wins[$winner->getName()]++;
 
-        echoTranslation("game.display_winner",$winner->getColorCode(),$winner->getName());
+        echoTranslation("game.display_winner", $winner->getColorCode(), $winner->getName());
 
         $gameCount++;
         progressBar($gameCount, GAME_NUMBER);
@@ -103,7 +62,7 @@ function autoPlayedGame($brand, $nilah, $ivern, $mapInput)
 function playTurn(array $characters): array
 {
     $attacker = array_pop($characters);
-    echoTranslation("game.normal_turn", $attacker->getColorCode(),$attacker->getName(),$attacker->getLevel());
+    echoTranslation("game.normal_turn", $attacker->getColorCode(), $attacker->getName(), $attacker->getLevel());
 
     $key = array_rand($characters);
     $target = $characters[$key];
@@ -121,7 +80,8 @@ function playTurn(array $characters): array
 }
 
 
-function userInGame($characters,$mapInput){
+function userInGame($characters, $mapInput)
+{
 
     while (true) {
         echoTranslation("game.user_choice.choose_character");
@@ -136,39 +96,34 @@ function userInGame($characters,$mapInput){
         if (in_array($input, $characterNames)) {
             clearScreen();
             $user = $mapInput[$input];
-            echoTranslation("game.user_choice.chosen_character", $user->getColorCode(),$input);
+            echoTranslation("game.user_choice.chosen_character", $user->getColorCode(), $input);
             break;
         } else {
             echoTranslation("game.user_choice.invalid_character");
         }
     }
 
-
-
     while (count($characters) > 1) {
-
         $attacker = array_pop($characters);
 
-
-        if($attacker->getName() != $user->getName()){
-            echoTranslation("game.normal_turn", $attacker->getColorCode(),$attacker->getName(),$attacker->getLevel());
+        if ($attacker->getName() != $user->getName()) {
+            echoTranslation("game.normal_turn", $attacker->getColorCode(), $attacker->getName(), $attacker->getLevel());
 
             $key = array_rand($characters);
             $target = $characters[$key];
             $attacker->turn($target);
         } else {
             $attacker->userTurn();
-            echoTranslation("game.user_turn", $attacker->getColorCode(),$attacker->getName(),$attacker->getLevel(),$attacker->getHealth(),$attacker->getMana());
+            echoTranslation("game.user_turn", $attacker->getColorCode(), $attacker->getName(), $attacker->getLevel(), $attacker->getHealth(), $attacker->getMana());
 
             $key = array_rand($characters);
             $target = $characters[$key];
 
-
-            echoTranslation("game.player_target", $target->getColorCode(),$target->getName(),$target->getLevel(),$target->getHealth(),$target->getArmor(),$target->getMagicResistance());
+            echoTranslation("game.player_target", $target->getColorCode(), $target->getName(), $target->getLevel(), $target->getHealth(), $target->getArmor(), $target->getMagicResistance());
             echo PHP_EOL;
             echoTranslation("game.actions.available_actions");
             echoWithColor("&9(1) => ");
-            echoTranslation("game.actions.baseAttack", $attacker->getPhysicalDamages(), $attacker->getCriticalChance()*100);
+            echoTranslation("game.actions.baseAttack", $attacker->getPhysicalDamages(), $attacker->getCriticalChance() * 100);
             echoWithColor("&9(2) => ");
             displaySpell($attacker->getAttackSpell());
             echoWithColor("&9(3) => ");
@@ -177,7 +132,7 @@ function userInGame($characters,$mapInput){
             displaySpell($attacker->getHealSpell());
 
             $validAction = false;
-            while (!$validAction){
+            while (!$validAction) {
                 echoTranslation("game.actions.which_action");
                 $input = (int)trim(stream_get_line(STDIN, 1024, PHP_EOL));
 
@@ -187,17 +142,17 @@ function userInGame($characters,$mapInput){
                         $attacker->attack($target);
                         break;
                     case 2:
-                        if($validAction = validateSpellAction($attacker->getAttackSpell(), $attacker)){
+                        if ($validAction = validateSpellAction($attacker->getAttackSpell(), $attacker)) {
                             $attacker->getAttackSpell()->cast($target);
                         }
                         break;
                     case 3:
-                        if($validAction = validateSpellAction($attacker->getDefendSpell(), $attacker)){
+                        if ($validAction = validateSpellAction($attacker->getDefendSpell(), $attacker)) {
                             $attacker->getDefendSpell()->cast($target);
                         }
                         break;
                     case 4:
-                        if($validAction = validateSpellAction($attacker->getHealSpell(), $attacker)){
+                        if ($validAction = validateSpellAction($attacker->getHealSpell(), $attacker)) {
                             $attacker->getHealSpell()->cast($target);
                         }
                         break;
@@ -208,7 +163,6 @@ function userInGame($characters,$mapInput){
             }
 
         }
-
 
         if ($target->isDead()) {
             unset($characters[$key]);
@@ -225,13 +179,14 @@ function userInGame($characters,$mapInput){
 
     $winner = array_pop($characters);
 
-    echoTranslation("game.display_winner",$winner->getColorCode(),$winner->getName());
+    echoTranslation("game.display_winner", $winner->getColorCode(), $winner->getName());
     echo PHP_EOL;
     echoTranslation("game.end");
     exit();
 }
 
-function normalGame($brand,$nilah, $ivern, $mapInput){
+function normalGame($brand, $nilah, $ivern, $mapInput)
+{
     clearScreen();
     $wins = [
         "Brand" => 0,
@@ -251,7 +206,7 @@ function normalGame($brand,$nilah, $ivern, $mapInput){
 
         while (count($characters) > 1) {
             $characters = playTurn($characters);
-            if(count($characters) != 1){
+            if (count($characters) != 1) {
                 echoTranslation("game.user_choice.continue");
                 stream_get_line(STDIN, 1024, PHP_EOL);
                 clearScreen();
@@ -262,7 +217,7 @@ function normalGame($brand,$nilah, $ivern, $mapInput){
 
         $wins[$winner->getName()]++;
 
-        echoTranslation("game.display_winner",$winner->getColorCode(),$winner->getName());
+        echoTranslation("game.display_winner", $winner->getColorCode(), $winner->getName());
 
         $gameCount++;
         echo PHP_EOL;

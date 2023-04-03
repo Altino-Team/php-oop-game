@@ -1,6 +1,7 @@
 <?php
 
 namespace Altino\Items;
+
 class Item
 {
     protected string $name;

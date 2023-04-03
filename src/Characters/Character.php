@@ -158,14 +158,82 @@ class Character
         }
     }
 
-    public function getMagicalDamages(): int
-    {
-        return $this->magicalDamages;
+
+
+    private function levelUp() {
+        if($this->level == 20){
+            echoTranslation("game.character.max_level",$this->getColorCode(),$this->name,$this->level);
+            return;
+        }
+        $this->level++;
+        $this->xpForNextLevel = $this->calculateXpForNextLevel();
+        $this->maxHealth += 10;
+        $this->maxMana += 10;
+        $this->physicalDamages += 5;
+        $this->magicalDamages += 5;
+        $this->armor += 5;
+        $this->magicResistance += 5;
+        $this->initiative += 10;
+        echoTranslation("game.character.level_up",$this->getColorCode(),$this->name,$this->level);
     }
 
-    public function getPhysicalDamages(): int
+    public function reset() {
+        $this->health = $this->maxHealth;
+        $this->mana = $this->maxMana;
+        $this->isDead = false;
+        $this->attackSpell->resetCooldown();
+        $this->defendSpell->resetCooldown();
+        $this->healSpell->resetCooldown();
+    }
+
+    private function removeXpForNextLevel(int $xp)
     {
-        return $this->physicalDamages;
+        $this->xpForNextLevel -= $xp;
+        if($this->xpForNextLevel <= 0){
+            $this->levelUp();
+        }
+    }
+
+    public function getColorCode() : string
+    {
+        return match ($this->element->name) {
+            "FIRE" => "&c",
+            "WATER" => "&b",
+            "GRASS" => "&a",
+            default => "&f",
+        };
+    }
+
+    public function setHealth(int $health): void
+    {
+        if($this->maxHealth < $health){
+            $this->health = $this->maxHealth;
+        } else if($health < 0) {
+            $this->health = 0;
+        } else {
+            $this->health = $health;
+        }
+    }
+
+    public function toString(): string
+    {
+        return translate("game.character.info",
+            $this->getColorCode(),$this->name,$this->level,$this->getColorCode(),
+            $this->element->name,$this->health,$this->maxHealth,$this->mana,$this->maxMana,$this->item->getName(),
+            $this->getInitiative(),$this->xpForNextLevel,$this->armor,$this->magicResistance,
+            $this->criticalChance*100,$this->dodgeChance*100,$this->physicalDamages,
+            $this->magicalDamages,$this->healSpell->getCooldownCountDown(),
+            $this->defendSpell->getCooldownCountDown(),$this->attackSpell->getCooldownCountDown());
+    }
+
+    public function setMana(int $mana){
+        if ($mana > $this->maxMana){
+            $this->mana = $this->maxMana;
+        } else if ($mana < 0){
+            $this->mana = 0;
+        } else {
+            $this->mana = $mana;
+        }
     }
 
     public function getName(): string
@@ -183,16 +251,6 @@ class Character
         return $this->health;
     }
 
-    public function setHealth(int $health): void
-    {
-        if($this->maxHealth < $health){
-            $this->health = $this->maxHealth;
-        } else if($health < 0) {
-            $this->health = 0;
-        } else {
-            $this->health = $health;
-        }
-    }
 
     public function isDead() : bool {
         return $this->isDead;
@@ -216,16 +274,6 @@ class Character
     public function getMagicResistance(): int
     {
         return $this->magicResistance;
-    }
-
-    public function getCriticalChance(): float
-    {
-        return $this->criticalChance;
-    }
-
-    public function getDodgeChance(): float
-    {
-        return $this->dodgeChance;
     }
 
     public function getInitiative(): int
@@ -263,80 +311,15 @@ class Character
         return $this->healSpell;
     }
 
-
-    public function toString(): string
-    {
-        return translate("game.character.info",
-            $this->getColorCode(),$this->name,$this->level,$this->getColorCode(),
-            $this->element->name,$this->health,$this->maxHealth,$this->mana,$this->maxMana,$this->item->getName(),
-            $this->initiative,$this->xpForNextLevel,$this->armor,$this->magicResistance,
-            $this->criticalChance*100,$this->dodgeChance*100,$this->physicalDamages,
-            $this->magicalDamages,$this->healSpell->getCooldownCountDown(),
-            $this->defendSpell->getCooldownCountDown(),$this->attackSpell->getCooldownCountDown());
-    }
-
-    public function setMana(int $mana){
-        if ($mana > $this->maxMana){
-            $this->mana = $this->maxMana;
-        } else if ($mana < 0){
-            $this->mana = 0;
-        } else {
-            $this->mana = $mana;
-        }
-    }
-
     private function calculateXpForNextLevel() : int
     {
         return $this->level * 100;
     }
 
-    private function removeXpForNextLevel(int $xp)
-    {
-        $this->xpForNextLevel -= $xp;
-        if($this->xpForNextLevel <= 0){
-            $this->levelUp();
-        }
-    }
-
-    public function getColorCode() : string
-    {
-        return match ($this->element->name) {
-            "FIRE" => "&c",
-            "WATER" => "&b",
-            "GRASS" => "&a",
-            default => "&f",
-        };
-    }
-
-    private function levelUp() {
-        if($this->level == 20){
-            echoTranslation("game.character.max_level",$this->getColorCode(),$this->name,$this->level);
-            return;
-        }
-        $this->level++;
-        $this->xpForNextLevel = $this->calculateXpForNextLevel();
-        $this->maxHealth += 10;
-        $this->maxMana += 10;
-        $this->physicalDamages += 5;
-        $this->magicalDamages += 5;
-        $this->armor += 5;
-        $this->magicResistance += 5;
-        $this->initiative += 10;
-        echoTranslation("game.character.level_up",$this->getColorCode(),$this->name,$this->level);
-    }
 
     public function getLevel(): int
     {
         return $this->level;
-    }
-
-    public function reset() {
-        $this->health = $this->maxHealth;
-        $this->mana = $this->maxMana;
-        $this->isDead = false;
-        $this->attackSpell->resetCooldown();
-        $this->defendSpell->resetCooldown();
-        $this->healSpell->resetCooldown();
     }
 
 }

@@ -3,7 +3,6 @@
 namespace Altino\Languages;
 
 $lang = unserialize(file_get_contents('config.ini'))['language'];
-
 $data = json_decode(file_get_contents('lang/'.$lang.'.json'), true);
 
 function addTranslations($lang,$translations, $parent_key = '') {

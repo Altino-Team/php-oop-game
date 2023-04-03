@@ -36,20 +36,9 @@ abstract class Spell {
     {
         $this->owner = $owner;
     }
-
-    public function getNameKey(): string
-    {
-        return $this->name;
-    }
-
     public function getName(): string
     {
         return translate($this->name);
-    }
-
-    public function getDescriptionKey(): string
-    {
-        return $this->description;
     }
 
     public function getDescription(): string

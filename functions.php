@@ -1,11 +1,59 @@
 <?php
 
 use Altino\Characters\Character;
-use Altino\Spells\Spell;
-use Altino\Types\Element;
+use Altino\Spells\{Spell, AttackSpell, DefendSpell, HealSpell};
+use Altino\Items\Item;
+use Altino\Types\{Element, DamageType};
 use Altino\Languages\Translatable;
-use JetBrains\PhpStorm\NoReturn;
 
+function defineGameNumber($argv){
+    if(in_array("--turn", $argv)){
+        $turn = $argv[array_search("--turn", $argv) + 1];
+        $turn = (int)$turn;
+        if($turn > 0){
+            if(in_array("--play", $argv)){
+                define("GAME_NUMBER", 1);
+            } else {
+                define("GAME_NUMBER", $turn);
+            }
+        } else {
+            define("GAME_NUMBER", 1);
+        }
+    } else {
+        define("GAME_NUMBER", 1);
+    }
+}
+
+function loadLanguages($argv){
+    if (!file_exists('config.ini')) {
+        $config = array('language' => 'en');
+        file_put_contents('config.ini', serialize($config));
+    }
+    $config = unserialize(file_get_contents('config.ini'));
+    if(in_array("--lang", $argv)){
+        $config['language'] = $argv[array_search("--lang", $argv) + 1];
+        file_put_contents('config.ini', serialize($config));
+    }
+}
+
+function createCharacters() : array {
+    $brand = new Character("Brand", Element::FIRE, 3000, 250,
+        new Item("Baton du Vide", 10, 200, 10, 10, 10),
+        100, 90, 0.20, 0.20, 100,100,280,
+        new AttackSpell(700,DamageType::MAGICAL,40,1),new DefendSpell(150,50,4),new HealSpell(800,40,3));
+
+    $nilah = new Character("Nilah", Element::WATER, 2200, 140,
+        new Item("Arc-Bouclier", 150, 0, 0, 10, 10),
+        90, 150, 0.4, 0.10, 120,180,30,
+        new AttackSpell(450,DamageType::PHYSICAL,40,2),new DefendSpell(100,20,4),new HealSpell(500,30,4));
+
+    $ivern = new Character("Ivern", Element::GRASS, 5000, 120,
+        new Item("Warmog", 0, 0, 30, 1000, 0),
+        100, 150, 0.05, 0.05, 140,150,180,
+        new AttackSpell(400,DamageType::MAGICAL,30,2),new DefendSpell(200,70,5),new HealSpell(500,50,3));
+
+    return [$brand, $nilah, $ivern];
+}
 
 function chance(float $percentage): bool
 {
