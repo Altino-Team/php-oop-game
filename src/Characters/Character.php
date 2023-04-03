@@ -158,7 +158,25 @@ class Character
         }
     }
 
+    public function getPhysicalDamages(): int
+    {
+        return $this->physicalDamages;
+    }
 
+    public function getMagicalDamages(): int
+    {
+        return $this->magicalDamages;
+    }
+
+    public function getCriticalChance(): float
+    {
+        return $this->criticalChance;
+    }
+
+    public function getDodgeChance(): float
+    {
+        return $this->dodgeChance;
+    }
 
     private function levelUp() {
         if($this->level == 20){
